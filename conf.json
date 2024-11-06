@@ -1,0 +1,6 @@
+{
+    "train": "/home/centurionlc/Centurion/Coding/781/781 data mining/dataset/images/train",
+    "val": "/home/centurionlc/Centurion/Coding/781/781 data mining/dataset/images/val",
+    "test": "/home/centurionlc/Centurion/Coding/781/781 data mining/dataset/images/test"
+}
+

@@ -1,0 +1,8 @@
+names:
+- Trophozoite
+- WBC
+- NEG
+nc: 3
+test: /home/centurionlc/Centurion/Coding/781/781 data mining/dataset/images/test
+train: /home/centurionlc/Centurion/Coding/781/781 data mining/dataset/images/train
+val: /home/centurionlc/Centurion/Coding/781/781 data mining/dataset/images/val

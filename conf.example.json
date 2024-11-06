@@ -1,0 +1,5 @@
+{
+    "train": "/full/path/to/datasets/dataset/images/train",
+    "val": "/full/path/to/datasets/dataset/images/val",
+    "test": "/full/path/to/datasets/dataset/images/test"
+}
