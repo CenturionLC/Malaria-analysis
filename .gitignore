@@ -6,3 +6,11 @@ env
 runs
 models
 nx
+
+paper
+temporary
+uniform
+
+yolo*
+
+*__pycache__*

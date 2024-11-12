@@ -6,8 +6,13 @@ import pandas as pd
 import os
 from pathlib import Path
 import yaml
-import shutil
 
+from tools.setup import setupProject
+
+
+
+if not os.path.exists('dataset'):
+    setupProject()
 
 DATASET_DIR = Path('dataset')
 IMAGES_DIR = DATASET_DIR / 'images'
@@ -48,49 +53,43 @@ device = torch.device(
     else "cpu"
 )
 
-model = YOLO("yolo11n.pt")
+# model = YOLO("yolo11n.pt")
 
-detect  = Path(os.getcwd()) / "runs/detect"
+# detect  = Path(os.getcwd()) / "runs/detect"
 
-results = model.train(
-    data='data.yaml',
-    epochs=30,
-    batch=3,
-    imgsz=1280,
-    device=device,
-    cache=True,
-    project=detect,
-    name="run",
-)
-
-
-# Grab save dir from dictionary
-best_weights_path = results.save_dir / 'weights/best.pt'
-last_weights_path = results.save_dir / 'weights/last.pt'   
+# results = model.train(
+#     data='data.yaml',
+#     epochs=30,
+#     batch=3,
+#     imgsz=1280,
+#     device=device,
+#     cache=True,
+#     project=detect,
+#     name="run",
+# )
 
 
-# Load model for validation
-model = YOLO("runs/detect/run14/weights/last.pt")
-
-# Save model to /home/centurionlc/Centurion/Coding/711/assignment 3/
-
-# shutil.copy(last_model_path, os.path.join(destination_dir, new_last_name))
-# shutil.copy(best_weights_path, os.path.join('/home/centurionlc/Centurion/Coding/711/assignment 3/', 'frog.pt'))
+# # Grab save dir from dictionary
+# best_weights_path = results.save_dir / 'weights/best.pt'
+# last_weights_path = results.save_dir / 'weights/last.pt'   
 
 
+# # Load model for validation
+# model = YOLO("runs/detect/run14/weights/last.pt")
 
-print('\nPerforming testing...\n')
+
+# print('\nPerforming testing...\n')
 
 
-results = model.val(
-    data='data.yaml',
-    project="runs/detect/run9/",
-    name="test",
-    iou=0.3,
-    imgsz=1280,
-    split='test',
-    conf=0.001,
-)
+# results = model.val(
+#     data='data.yaml',
+#     project="runs/detect/run9/",
+#     name="test",
+#     iou=0.3,
+#     imgsz=1280,
+#     split='test',
+#     conf=0.001,
+# )
 
 print('Testing completed.') 
 
