@@ -1,9 +1,11 @@
 import os
 import pandas as pd
 from PIL import Image
-
+import cv2
 import seaborn as sns
 import matplotlib.pyplot as plt
+import numpy as np
+
 
 def load_annotations(annotations_path):
     annotations = []
@@ -56,30 +58,54 @@ def findImageSizes(images_path):
     plt.ylabel('Frequency')
     plt.show()
 
+def heatmap(dir_path):
+    labels_path = os.path.join(dir_path, "labels")
+    
+    heatmap = None
 
-# # Assuming images are of the same dimensions for simplicity (e.g., 640x640)
-# image_width, image_height = 640, 640
+    # Heatmap grid dimensions (e.g., 100x100 for normalized space)
+    grid_size = 100
+    heatmap = np.zeros((grid_size, grid_size), dtype=np.float32)
 
-# # Convert normalized coordinates to pixel coordinates
-# df["x_pixel"] = df["x_center"] * image_width
-# df["y_pixel"] = df["y_center"] * image_height
+    # Process each label file
+    for label_file in os.listdir(labels_path):
+        label_path = os.path.join(labels_path, label_file)
 
+        # Read the label file
+        with open(label_path, "r") as file:
+            print('Processing:', label_file)
+            for line in file:
+                # YOLO format: class x_center y_center width height
+                _, x_center, y_center, _, _ = map(float, line.split())
 
-# import seaborn as sns
-# import matplotlib.pyplot as plt
+                # Map normalized coordinates to grid indices
+                grid_x = int(x_center * grid_size)
+                grid_y = int(y_center * grid_size)
 
-# # Set up the plot
-# plt.figure(figsize=(8, 8))
-# sns.kdeplot(
-#     x=df["x_pixel"], y=df["y_pixel"],
-#     cmap="Reds", fill=True, thresh=0.05, bw_adjust=0.5
-# )
-# plt.gca().invert_yaxis()  # Invert y-axis to match image coordinate system
-# plt.title("Heatmap of Bounding Box Center Points")
-# plt.xlabel("X Position (pixels)")
-# plt.ylabel("Y Position (pixels)")
-# plt.show()
+                # Clamp grid indices to ensure they're within bounds
+                grid_x = max(0, min(grid_x, grid_size - 1))
+                grid_y = max(0, min(grid_y, grid_size - 1))
+
+                # Increment the heatmap at the grid location
+                heatmap[grid_y, grid_x] += 1
+
+    # Normalize the heatmap for better visualization
+    if np.max(heatmap) > 0:
+        heatmap = heatmap / np.max(heatmap)
+
+        # Display the heatmap
+        plt.figure(figsize=(10, 10))
+        plt.imshow(heatmap, cmap="hot", interpolation="nearest", extent=[0, 1, 0, 1])
+        plt.colorbar(label="Density")
+        plt.title("Object Center Density Heatmap (Normalized Coordinates)")
+        plt.xlabel("Normalized X")
+        plt.ylabel("Normalized Y")
+        plt.savefig('paper/data/heatmap.png')
+        plt.show()
+    else:
+        print("No valid data found.")
 
 
 if __name__ == "__main__":
-    findImageSizes('uniform/images')
+    # findImageSizes('uniform/images')
+    heatmap('uniform')

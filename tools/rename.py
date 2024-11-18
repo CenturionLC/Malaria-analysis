@@ -40,11 +40,11 @@ def main(images_folder, labels_folder,prefix):
     rename_files_with_prefix(labels_folder, prefix)
 
 if __name__ == "__main__":
-    images_folder = 'temporary/uganda/images'
-    labels_folder = 'temporary/uganda/labels'
+    images_folder = 'uniform/images'
+    labels_folder = 'uniform/labels'
     
-    prefix = "uganda_"
+    prefix = "thick_ghana"
 
     # main(images_folder, labels_folder, prefix)
-
-    clean_repeated_prefix(labels_folder, prefix)
+    clean_repeated_prefix(images_folder, prefix)
+    # clean_repeated_prefix(labels_folder, prefix)
