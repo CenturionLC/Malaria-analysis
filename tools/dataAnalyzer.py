@@ -105,7 +105,57 @@ def heatmap(dir_path):
     else:
         print("No valid data found.")
 
+def parse_yolo_label(label_path, img_width, img_height):
+    boxes = []
+    with open(label_path, "r") as file:
+        for line in file:
+            values = line.strip().split()
+            class_id = int(values[0])
+            x_center, y_center, width, height = map(float, values[1:])
+            # Convert YOLO format (normalized) to pixel format
+            x_min = int((x_center - width / 2) * img_width)
+            y_min = int((y_center - height / 2) * img_height)
+            x_max = int((x_center + width / 2) * img_width)
+            y_max = int((y_center + height / 2) * img_height)
+            boxes.append((class_id, x_min, y_min, x_max, y_max))
+    return boxes
+
+def visualize_images(image_folder, label_folder):
+    # Load 6 images with their labels
+    image_files = sorted(os.listdir(image_folder))[:6]
+
+    plt.figure(figsize=(15, 10))
+    for idx, image_file in enumerate(image_files):
+        image_path = os.path.join(image_folder, image_file)
+        label_path = os.path.join(label_folder, os.path.splitext(image_file)[0] + ".txt")
+        
+        # Read image
+        img = cv2.imread(image_path)
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)  # Convert BGR to RGB for matplotlib
+        
+        # Parse label
+        img_height, img_width, _ = img.shape
+        if os.path.exists(label_path):
+            boxes = parse_yolo_label(label_path, img_width, img_height)
+            for class_id, x_min, y_min, x_max, y_max in boxes:
+                # Draw bounding boxes and labels
+                color = (255, 0, 0)  # Red color for bounding box
+                cv2.rectangle(img, (x_min, y_min), (x_max, y_max), color, 2)
+                cv2.putText(img, str(class_id), (x_min, y_min - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
+
+        # Plot image
+        plt.subplot(2, 3, idx + 1)
+        plt.imshow(img)
+        plt.title(f"Image: {image_file}")
+        plt.axis("off")
+
+    plt.tight_layout()
+    plt.suptitle("Visualizing Images with Bounding Boxes", fontsize=16)
+    plt.savefig('paper/data/plot_initial_data.png')
+    plt.show()
+
 
 if __name__ == "__main__":
     # findImageSizes('uniform/images')
-    heatmap('uniform')
+    # heatmap('uniform')
+    visualize_images('uniform/images', 'uniform/labels')
