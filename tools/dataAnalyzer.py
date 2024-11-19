@@ -5,7 +5,7 @@ import cv2
 import seaborn as sns
 import matplotlib.pyplot as plt
 import numpy as np
-
+from collections import Counter
 
 def load_annotations(annotations_path):
     annotations = []
@@ -107,6 +107,8 @@ def heatmap(dir_path):
 
 def parse_yolo_label(label_path, img_width, img_height):
     boxes = []
+    class_ids = []
+    box_dims = []
     with open(label_path, "r") as file:
         for line in file:
             values = line.strip().split()
@@ -118,7 +120,63 @@ def parse_yolo_label(label_path, img_width, img_height):
             x_max = int((x_center + width / 2) * img_width)
             y_max = int((y_center + height / 2) * img_height)
             boxes.append((class_id, x_min, y_min, x_max, y_max))
-    return boxes
+            class_ids.append(class_id)
+            box_dims.append((width, height))
+    return boxes,class_ids, box_dims
+
+
+def process_dataset(image_folder, label_folder):
+    # Initialize variables to collect data
+    class_counts = Counter()
+    all_boxes = []
+    no_label_images = []
+    total_labels = 0
+
+    # Process dataset
+    label_files = sorted(os.listdir(label_folder))
+    for label_file in label_files:
+        img = cv2.imread(os.path.join(image_folder, os.path.splitext(label_file)[0] + ".jpg"))
+        img_height, img_width, _ = img.shape
+
+        label_path = os.path.join(label_folder, label_file)
+        _,class_ids, box_dims = parse_yolo_label(label_path, img_width, img_height)
+        
+        if class_ids:
+            # Count classes
+            class_counts.update(class_ids)
+            total_labels += len(class_ids)
+            all_boxes.extend(box_dims)
+        else:
+            # Record images with no labels
+            image_name = os.path.splitext(label_file)[0] + ".jpg"
+            no_label_images.append(image_name)
+
+    # Bounding box stats
+    box_areas = [w * h for w, h in all_boxes]
+    box_widths = [w for w, h in all_boxes]
+    box_heights = [h for w, h in all_boxes]
+
+    # Print stats
+    print(f"Total number of images: {len(os.listdir(image_folder))}")
+    print(f"Total number of label files: {len(label_files)}")
+    print(f"Total bounding boxes: {total_labels}")
+    print(f"Number of images without labels: {len(no_label_images)}\n")
+
+    print("Class distribution:")
+    for class_id, count in class_counts.items():
+        print(f"  Class {class_id}: {count} instances")
+
+    print("\nBounding box statistics:")
+    print(f"  Average width: {np.mean(box_widths):.4f}")
+    print(f"  Average height: {np.mean(box_heights):.4f}")
+    print(f"  Average area: {np.mean(box_areas):.4f}")
+    print(f"  Median area: {np.median(box_areas):.4f}")
+    print(f"  Total bounding box area (normalized): {np.sum(box_areas):.4f}")
+
+    # Optional: Save stats to CSV
+    stats_df = pd.DataFrame.from_dict(class_counts, orient="index", columns=["Instances"])
+    stats_df.index.name = "Class ID"
+    stats_df.to_csv("class_distribution.csv")
 
 def visualize_images(image_folder, label_folder):
     # Load 6 images with their labels
@@ -158,4 +216,5 @@ def visualize_images(image_folder, label_folder):
 if __name__ == "__main__":
     # findImageSizes('uniform/images')
     # heatmap('uniform')
-    visualize_images('uniform/images', 'uniform/labels')
+    # visualize_images('uniform/images', 'uniform/labels')
+    process_dataset('uniform/images', 'uniform/labels')
