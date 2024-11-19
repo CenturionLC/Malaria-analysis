@@ -10,7 +10,7 @@ import yaml
 from tools.setup import setupProject
 
 
-def run():
+def run(device):
     if not os.path.exists('dataset'):
         setupProject()
 
@@ -43,13 +43,7 @@ def run():
     with open(yaml_path, 'w') as file:
         yaml.dump(data_yaml, file, default_flow_style=False)
 
-    device = torch.device(
-        0
-        if torch.cuda.is_available()
-        else "mps"
-        if torch.backends.mps.is_available()
-        else "cpu"
-    )
+
 
     model = YOLO("transferred.pt")
 
@@ -59,15 +53,43 @@ def run():
         data='data.yaml',
         epochs=30,
         batch=4,
-        imgsz="1024,768",
+        imgsz=1024,
         device=device,
         cache="disk",
         project=detect,
         name="run",
     )
 
+def test(device):
+    model = YOLO('best.pt')
+
+    print('\nPerforming testing...\n')
+
+
+    results = model.val(
+        data='data.yaml',
+        project="runs/detect/",
+        name="test",
+        device=device,
+        iou=0.3,
+        imgsz=1024,
+        split='test',
+        conf=0.01,
+        save_json=True,
+    )
+
 
 if __name__ == "__main__":
-    run()
+    device = torch.device(
+        0
+        if torch.cuda.is_available()
+        else "mps"
+        if torch.backends.mps.is_available()
+        else "cpu"
+    )
+
+
+    run(device)
+    test(device)
 
 
