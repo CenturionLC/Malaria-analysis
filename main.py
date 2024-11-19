@@ -67,30 +67,6 @@ def run():
     )
 
 
-# # Grab save dir from dictionary
-# best_weights_path = results.save_dir / 'weights/best.pt'
-# last_weights_path = results.save_dir / 'weights/last.pt'   
-
-
-# # Load model for validation
-# model = YOLO("runs/detect/run14/weights/last.pt")
-
-
-# print('\nPerforming testing...\n')
-
-
-# results = model.val(
-#     data='data.yaml',
-#     project="runs/detect/run9/",
-#     name="test",
-#     iou=0.3,
-#     imgsz=1280,
-#     split='test',
-#     conf=0.001,
-# )
-
-
-
 if __name__ == "__main__":
     run()
 
