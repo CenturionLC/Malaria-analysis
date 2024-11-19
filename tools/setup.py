@@ -9,7 +9,6 @@ from tools.relabel import filter_and_relabel_ghana,filter_and_relabel_uganda
 def setupProject():
 
     if not os.path.exists('datasets'):
-        # throw 
         print('Please download the datasets and place in a folder named datasets.')
         exit(1)
 
