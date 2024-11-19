@@ -50,12 +50,12 @@ You will need to add a conf.json to the root of the project that defines the pat
 }
 ```
 
-You can then simply run the following command to train and test the model :
+Kindly note that the dataset, images and the train,val and test folders will all be generated once the main.py is run. 
+
+You can then simply run the following command to extract the dataset, amend it and then train and test the model :
 
 ```bash
-{
     python3 main.py
-}  
 ```
 
 ## Results
