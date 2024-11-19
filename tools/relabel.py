@@ -38,6 +38,9 @@ def filter_and_relabel_ghana(dir):
                 # Replace class_id with the new label and keep the rest of the line as is
                 new_line = f"{keep_indexes[class_id]} {' '.join(parts[1:])}"
                 new_lines.append(new_line)
+
+        # Remove duplicates 
+        new_lines = list(set(new_lines))
         
         # Rewrite file with filtered and relabeled data
         with open(label_path, 'w') as f:
@@ -70,6 +73,9 @@ def filter_and_relabel_uganda(dir):
                 new_line = f"{class_name} {' '.join(parts[1:])}"
                 new_lines.append(new_line)
 
+        # Remove duplicates 
+        new_lines = list(set(new_lines))
+        
         with open(label_path, 'w') as f:
             if len(new_lines) == 0:
                 # Write an empty file 

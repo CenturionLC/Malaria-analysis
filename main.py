@@ -39,12 +39,10 @@ def run():
         'names': class_names
     }
 
-    # Write to file
     yaml_path = 'data.yaml'
     with open(yaml_path, 'w') as file:
         yaml.dump(data_yaml, file, default_flow_style=False)
 
-    # Determine the device to use
     device = torch.device(
         0
         if torch.cuda.is_available()
@@ -53,17 +51,17 @@ def run():
         else "cpu"
     )
 
-    model = YOLO("yolo11n.pt")
+    model = YOLO("transferred.pt")
 
     detect  = Path(os.getcwd()) / "runs/detect"
 
     results = model.train(
         data='data.yaml',
         epochs=30,
-        batch=8,
-        imgsz=[1024,768],
+        batch=4,
+        imgsz="1024,768",
         device=device,
-        cache=True,
+        cache="disk",
         project=detect,
         name="run",
     )
