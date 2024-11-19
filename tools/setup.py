@@ -2,9 +2,9 @@
 
 import os
 
-from tools.extractor import extractFiles
+from tools.extractor import main as extractFiles
 from tools.split import split, rename_folders, generate_base
-
+from tools.relabel import filter_and_relabel_ghana,filter_and_relabel_uganda
 
 def setupProject():
 
@@ -24,7 +24,12 @@ def setupProject():
     rename_folders('temporary/ghana/Thin Images Ghana/Thin Images With Annotations', 'labels_yolo', 'labels')
     rename_folders('temporary/uganda', 'Labels-YOLO', 'labels')
 
+    print('Folders renamed successfully.')
 
+    ### Relabel data
+    filter_and_relabel_ghana('temporary/ghana/Thin Images Ghana/Thin Images With Annotations')
+    filter_and_relabel_uganda('temporary/uganda')
+    
     # Rename files to be unique in the dataset
     from tools.rename import main as rename_files_with_prefix
 
@@ -52,10 +57,6 @@ def setupProject():
     rename_files_with_prefix(input_folder,label_folder, prefix)
 
     print('Files renamed successfully.')
-
-
-
-    print('Folders renamed successfully.')
 
     ### Move files to dataset folder
     print('Splitting data into train, test, and validation sets...')

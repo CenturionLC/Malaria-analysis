@@ -1,8 +1,7 @@
 import os
 
-def filter_and_relabel_yolo_labels():
-    temp_dir = 'temp'
-    labels_dir = os.path.join(temp_dir, 'labels')
+def filter_and_relabel_ghana(dir):
+    labels_dir = os.path.join(dir, 'labels')
     
     # Map for relabeling: 'trophozoite' -> 0, 'white blood cell' -> 1
     label_map = {
@@ -14,7 +13,7 @@ def filter_and_relabel_yolo_labels():
     classes_to_keep = ['trophozoite', 'white blood cell']
     
     # Read the labels.txt file to get the index of each class name
-    labels_path = os.path.join(temp_dir, 'label.txt')
+    labels_path = os.path.join(dir, 'label.txt')
     with open(labels_path, 'r') as f:
         class_names = [line.strip() for line in f.readlines()]
     
@@ -42,9 +41,46 @@ def filter_and_relabel_yolo_labels():
         
         # Rewrite file with filtered and relabeled data
         with open(label_path, 'w') as f:
-            f.write('\n'.join(new_lines) + '\n')
+            if len(new_lines) == 0:
+                # Write an empty file 
+                f.write('')
+            else: 
+                f.write('\n'.join(new_lines) + '\n')
         
         print(f"Processed {label_file}")
 
+def filter_and_relabel_uganda(dir):
+    # Uganda has Trop as index 0 and WBC as index 1 already
+    labels_dir = os.path.join(dir, 'labels')
+
+    keep_indexes = ['0','1']
+
+    for label_file in os.listdir(labels_dir):
+        label_path = os.path.join(labels_dir, label_file)
+
+        with open(label_path, 'r') as f:
+            lines = f.readlines()
+
+        new_lines = []
+        for line in lines:
+            parts = line.strip().split()
+            class_name = parts[0]
+
+            if class_name in keep_indexes:
+                new_line = f"{class_name} {' '.join(parts[1:])}"
+                new_lines.append(new_line)
+
+        with open(label_path, 'w') as f:
+            if len(new_lines) == 0:
+                # Write an empty file 
+                f.write('')
+            else: 
+                f.write('\n'.join(new_lines) + '\n')
+
+        print(f"Processed {label_file}")
+
+
+
 # Usage
-filter_and_relabel_yolo_labels()
+if __name__ == '__main__':
+    filter_and_relabel_uganda('temporary/uganda')

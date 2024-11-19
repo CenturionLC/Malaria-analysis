@@ -10,63 +10,63 @@ import yaml
 from tools.setup import setupProject
 
 
+def run():
+    if not os.path.exists('dataset'):
+        setupProject()
 
-if not os.path.exists('dataset'):
-    setupProject()
+    DATASET_DIR = Path('dataset')
+    IMAGES_DIR = DATASET_DIR / 'images'
 
-DATASET_DIR = Path('dataset')
-IMAGES_DIR = DATASET_DIR / 'images'
+    TRAIN_IMAGES_DIR = IMAGES_DIR / 'train'
+    VAL_IMAGES_DIR = IMAGES_DIR / 'val'
+    TEST_IMAGES_DIR = IMAGES_DIR / 'test'
 
-TRAIN_IMAGES_DIR = IMAGES_DIR / 'train'
-VAL_IMAGES_DIR = IMAGES_DIR / 'val'
-TEST_IMAGES_DIR = IMAGES_DIR / 'test'
+    from json import loads
+    config = { "train": "./images/train", "val": "./images/val", "test": "./images/test" } # Fallback
+    if os.path.exists('conf.json'):
+        with open('conf.json', 'r') as f:
+            config = config | loads(f.read())
 
-from json import loads
-config = { "train": "./images/train", "val": "./images/val", "test": "./images/test" } # Fallback
-if os.path.exists('conf.json'):
-    with open('conf.json', 'r') as f:
-        config = config | loads(f.read())
+    # Create a data.yaml file required by yolo
+    class_names = ['Trophozoite', 'WBC','NEG']
+    num_classes = len(class_names)
 
-# Create a data.yaml file required by yolo
-class_names = ['Trophozoite', 'WBC','NEG']
-num_classes = len(class_names)
+    data_yaml = {
+        'train': config['train'],
+        'val': config['val'],
+        'test': config['test'],
+        'nc': num_classes,
+        'names': class_names
+    }
 
-data_yaml = {
-    'train': config['train'],
-    'val': config['val'],
-    'test': config['test'],
-    'nc': num_classes,
-    'names': class_names
-}
+    # Write to file
+    yaml_path = 'data.yaml'
+    with open(yaml_path, 'w') as file:
+        yaml.dump(data_yaml, file, default_flow_style=False)
 
-# Write to file
-yaml_path = 'data.yaml'
-with open(yaml_path, 'w') as file:
-    yaml.dump(data_yaml, file, default_flow_style=False)
+    # Determine the device to use
+    device = torch.device(
+        0
+        if torch.cuda.is_available()
+        else "mps"
+        if torch.backends.mps.is_available()
+        else "cpu"
+    )
 
-# Determine the device to use
-device = torch.device(
-    0
-    if torch.cuda.is_available()
-    else "mps"
-    if torch.backends.mps.is_available()
-    else "cpu"
-)
+    model = YOLO("yolo11n.pt")
 
-# model = YOLO("yolo11n.pt")
+    detect  = Path(os.getcwd()) / "runs/detect"
 
-# detect  = Path(os.getcwd()) / "runs/detect"
-
-# results = model.train(
-#     data='data.yaml',
-#     epochs=30,
-#     batch=3,
-#     imgsz=1280,
-#     device=device,
-#     cache=True,
-#     project=detect,
-#     name="run",
-# )
+    results = model.train(
+        data='data.yaml',
+        epochs=30,
+        batch=8,
+        imgsz=[1024,768],
+        device=device,
+        cache=True,
+        project=detect,
+        name="run",
+    )
 
 
 # # Grab save dir from dictionary
@@ -91,5 +91,9 @@ device = torch.device(
 #     conf=0.001,
 # )
 
-print('Testing completed.') 
+
+
+if __name__ == "__main__":
+    run()
+
 

@@ -10,7 +10,7 @@ def rename_folders(path, old_name, new_name):
         # Construct the full folder path
         folder_path = os.path.join(path, folder)
         # Check if it’s a folder and matches the old_name
-        if os.path.isdir(folder_path) and os.path.exists(os.path.join(folder_path, old_name)):
+        if os.path.isdir(folder_path) and os.path.exists(os.path.join(path, old_name)):
             # Define the new folder name and path
             new_folder_name = folder.replace(old_name, new_name)
             new_folder_path = os.path.join(path, new_folder_name)
