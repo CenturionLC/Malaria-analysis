@@ -27,6 +27,8 @@ The model was trained on a L40S GPU with 48 GB of dedicated VRAM on an image siz
 
 Running the model will require a very large amount of RAM ~ 16GB dedicated VRAM and should take about 2-3 hours to train for 30 epochs. 
 
+The codebase was run and hosted on  https://lightning.ai and should only cost about $20 to train the model for 30 epochs.
+
 ## Getting started
 
 To get started with this project, clone the repository and download the dataset from the link above.
