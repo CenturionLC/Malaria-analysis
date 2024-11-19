@@ -1,5 +1,8 @@
 This projects aims to explore,analyze and perform malaria classification on the Makerere AI Lab Lacuna Malaria Dataverse available here : https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/VEADSE
 
+
+![Alt text](./plot_initial_data.png "Image Title")
+
 # Aims 
 
 This repository aims to explore the dataset, perform some analysis and build a model that can classify malaria in blood smears. The YOLO (You only look once) model will be used to assist with the 
