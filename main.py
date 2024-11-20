@@ -109,7 +109,7 @@ if __name__ == "__main__":
     )
 
 
-    run(device)
+    # run(device)
     test(device)
 
 
