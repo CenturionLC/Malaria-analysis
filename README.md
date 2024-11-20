@@ -30,7 +30,8 @@ The model was trained on a L40S GPU with 48 GB of dedicated VRAM on an image siz
 Running the model will require a very large amount of RAM ~ 16GB dedicated VRAM and should take about 2-3 hours to train for 30 epochs. 
 
 The codebase was run and hosted on  https://lightning.ai and should only cost about $20 to train the model for 30 epochs.
-## Folder Structure
+
+## Repository Layout
 
 ```
 ├── main.py
@@ -54,8 +55,25 @@ The codebase was run and hosted on  https://lightning.ai and should only cost ab
 │   ├── rename.py
 │   ├── setup.py
 │   ├── split.py
+├── transfer
+│   ├── main.py
+├── run-data
+│   ├── before-transfer
+│   ├── after-transfer
+│   ├── testing-results
 ```
 
+The repository is structured as follows :
+
+- main.py : Main logic and code for the project -> run this to train and test the model
+- requirements.txt : List of dependencies for the project
+- conf.json : Configuration file required for generating data.yaml 
+- meta : Folder containing metadata for the project
+- models : Folder containing the trained models
+- picture : Contains images for the README
+- tools : Folder containing a bunch of tools for data analysis and dataset manipulation
+- transfer : Folder containing the code the transferred model was trained on 
+- run-data : Folder containing results used in report
 
 ## Getting started
 
