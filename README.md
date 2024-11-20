@@ -81,6 +81,13 @@ To get started with this project, clone the repository and download the dataset 
 
 Please move each .rar from the dataset into a folder named datasets in the root directory of the project. 
 
+If you are using pip on linux, you first need to setup env and source from it. You can do this by running the following commands : 
+
+```bash
+    python3 -m venv env
+    source env/bin/activate
+```
+
 To install the dependencies for this project, you can run the following if you are using pip : 
 
 - pip install -r requirements.txt
@@ -90,9 +97,9 @@ You will need to add a conf.json to the root of the project that defines the pat
 
 ```json
 {
-    "train": "{path_to_repo}/dataset/images/train",
-    "val": "{path_to_repo}/dataset/images/val",
-    "test": "{path_to_repo}/dataset/images/test"
+    "train": "{absolute path_to_repo}/dataset/images/train",
+    "val": "{absolute path_to_repo}/dataset/images/val",
+    "test": "{absolute path_to_repo}/dataset/images/test"
 }
 ```
 
@@ -103,6 +110,9 @@ You can then simply run the following command to extract the dataset, amend it a
 ```bash
     python3 main.py
 ```
+
+Please be patient when running the main.py for the first time, as it will extract all data from the datasets, merge and amend them together as well 
+as perform some pre-processing on the data. 
 
 You may ignore the warnings regarding corrupt JPEG's, this comes from the dataset, due to the images being taken with a specific device. It will not 
 affect the training of the model.
