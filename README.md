@@ -1,7 +1,7 @@
 # Optimization of YOLO Architecture for Parasite Detection and Classification of Malaria in Microscopic Blood Smears
 
 
-![Alt text](./plot_initial_data.png "Image Title")
+![Alt text](./picture/plot_initial_data.png)
 
 ## Aims 
 
@@ -20,6 +20,8 @@ This project was built in python 3.8.5 and uses a wide array of libraries such a
 - ultralytics
 
 A full list of the dependencies can be found in the requirements.txt file.
+
+For added Transparency, the final model (best.pt) and the transferred model (transferred.pt) can be found in the models folder. 
 
 ## Technical Requirements
 
@@ -58,8 +60,37 @@ You can then simply run the following command to extract the dataset, amend it a
     python3 main.py
 ```
 
+You may ignore the warnings regarding corrupt JPEG's, this comes from the dataset, due to the images being taken with a specific device. It will not 
+affect the training of the model.
+
 ## Results
 
 YOLO will generate a runs folder within the root of the project that contains the results of the training and testing of the model.
 
 More fine-grained and precise data analysis output can be found by making use of the scripts in the tools folder. 
+
+## Folder Structure
+
+```
+├── main.py
+├── README.md
+├── requirements.txt
+├── conf.json
+├── .gitignore
+├── meta
+│   ├── class_distribution.csv
+│   ├── conf.example.json
+├── models
+│   ├── best.pt
+│   ├── transferred.pt
+├── picture
+│   ├── plot_initial_data.png
+├── tools
+│   ├── dataAnalyzer.py
+│   ├── extractor.py
+│   ├── precision.py
+│   ├── relabel.py
+│   ├── rename.py
+│   ├── setup.py
+│   ├── split.py
+```

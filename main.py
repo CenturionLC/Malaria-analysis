@@ -14,12 +14,6 @@ def run(device):
     if not os.path.exists('dataset'):
         setupProject()
 
-    DATASET_DIR = Path('dataset')
-    IMAGES_DIR = DATASET_DIR / 'images'
-
-    TRAIN_IMAGES_DIR = IMAGES_DIR / 'train'
-    VAL_IMAGES_DIR = IMAGES_DIR / 'val'
-    TEST_IMAGES_DIR = IMAGES_DIR / 'test'
 
     from json import loads
     config = { "train": "./images/train", "val": "./images/val", "test": "./images/test" } # Fallback
@@ -45,7 +39,7 @@ def run(device):
 
 
 
-    model = YOLO("transferred.pt")
+    model = YOLO("models/transferred.pt")
 
     detect  = Path(os.getcwd()) / "runs/detect"
 
@@ -81,7 +75,7 @@ def run(device):
     )
 
 def test(device):
-    model = YOLO('best.pt')
+    model = YOLO('models/best.pt')
 
     print('\nPerforming testing...\n')
 
@@ -109,7 +103,7 @@ if __name__ == "__main__":
     )
 
 
-    # run(device)
+    run(device)
     test(device)
 
 
