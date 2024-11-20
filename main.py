@@ -27,7 +27,7 @@ def run(device):
         with open('conf.json', 'r') as f:
             config = config | loads(f.read())
 
-    # Create a data.yaml file required by yolo
+    # Create the data.yaml file
     class_names = ['Trophozoite', 'WBC','NEG']
     num_classes = len(class_names)
 
@@ -49,7 +49,7 @@ def run(device):
 
     detect  = Path(os.getcwd()) / "runs/detect"
 
-    results = model.train(
+    model.train(
         data='data.yaml',
         epochs=30,
         batch=4,
@@ -58,6 +58,26 @@ def run(device):
         cache="disk",
         project=detect,
         name="run",
+        lr0=0.01,
+        lrf=0.01,
+        momentum=0.937,
+        weight_decay=0.0005,
+        warmup_epochs=3.0,
+        warmup_momentum=0.8,
+        warmup_bias_lr=0.1,
+        box=7.5,
+        cls=0.5,
+        dfl=1.5,
+        pose=12.0,
+        kobj=1.0,
+        label_smoothing=0.0,
+        nbs=64,
+        hsv_h=0.015,
+        hsv_s=0.7,
+        hsv_v=0.4,
+        degrees=0.0,
+        translate=0.1,
+        scale=0.5,
     )
 
 def test(device):
@@ -66,7 +86,7 @@ def test(device):
     print('\nPerforming testing...\n')
 
 
-    results = model.val(
+    model.val(
         data='data.yaml',
         project="runs/detect/",
         name="test",
