@@ -77,7 +77,7 @@ The repository is structured as follows :
 
 ## Getting started
 
-To get started with this project, clone the repository and download the dataset from the link above.
+To get started with this project, clone the repository and download the datasets from the link above.
 
 Please move each .rar from the dataset into a folder named datasets in the root directory of the project. 
 
@@ -123,3 +123,4 @@ YOLO will generate a runs folder within the root of the project that contains th
 
 More fine-grained and precise data analysis output can be found by making use of the scripts in the tools folder. 
 
+If you wish to reproduce the number of False Postives and False Negatives, simply run the precision.py inside the tools folder after running the main.py script. 
