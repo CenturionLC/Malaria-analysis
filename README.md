@@ -30,6 +30,32 @@ The model was trained on a L40S GPU with 48 GB of dedicated VRAM on an image siz
 Running the model will require a very large amount of RAM ~ 16GB dedicated VRAM and should take about 2-3 hours to train for 30 epochs. 
 
 The codebase was run and hosted on  https://lightning.ai and should only cost about $20 to train the model for 30 epochs.
+## Folder Structure
+
+```
+├── main.py
+├── README.md
+├── requirements.txt
+├── conf.json
+├── .gitignore
+├── meta
+│   ├── class_distribution.csv
+│   ├── conf.example.json
+├── models
+│   ├── best.pt
+│   ├── transferred.pt
+├── picture
+│   ├── plot_initial_data.png
+├── tools
+│   ├── dataAnalyzer.py
+│   ├── extractor.py
+│   ├── precision.py
+│   ├── relabel.py
+│   ├── rename.py
+│   ├── setup.py
+│   ├── split.py
+```
+
 
 ## Getting started
 
@@ -69,28 +95,3 @@ YOLO will generate a runs folder within the root of the project that contains th
 
 More fine-grained and precise data analysis output can be found by making use of the scripts in the tools folder. 
 
-## Folder Structure
-
-```
-├── main.py
-├── README.md
-├── requirements.txt
-├── conf.json
-├── .gitignore
-├── meta
-│   ├── class_distribution.csv
-│   ├── conf.example.json
-├── models
-│   ├── best.pt
-│   ├── transferred.pt
-├── picture
-│   ├── plot_initial_data.png
-├── tools
-│   ├── dataAnalyzer.py
-│   ├── extractor.py
-│   ├── precision.py
-│   ├── relabel.py
-│   ├── rename.py
-│   ├── setup.py
-│   ├── split.py
-```
